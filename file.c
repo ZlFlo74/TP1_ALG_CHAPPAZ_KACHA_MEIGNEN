@@ -5,51 +5,55 @@
 
 pfile_t creer_file ()
 {
-  /* 
-     a completer
-   */
-  return NULL ;
+  pfile_t file = malloc(sizeof(file_t));
+  file->tete = 0;
+  file->queue = -1;
+  return file;
 }
 
 int detruire_file (pfile_t f)
 {
-  /* 
-     a completer
-   */
-  return 0 ;
+  free(f);
+  return 0;
 }
-
-
-
 
 int file_vide (pfile_t f)
 {
-  /*
-    a completer
-  */
+  if (f->queue == -1)
+    return 1;
+
   return 0 ;
 }
 
 int file_pleine (pfile_t f)
-  {
-  /*
-    a completer
-  */
-  return 0 ;
+{
+  if (f->queue == MAX_FILE_SIZE - 1)
+    return 1;
+
+  return 0;
 }
 
 pnoeud_t defiler (pfile_t f)
+{
+  if(file_vide(f))
+    return NULL;
+
+  pnoeud_t noeud = f->Tab[f->tete];
+  for (int i=1; i<f->queue; i++)
   {
-  /*
-    a completer
-  */
-  return NULL ;
+    f->Tab[i-1] = f->Tab[i];
+  }
+  f->queue --;
+
+  return noeud;
 }
 
 int enfiler (pfile_t f, pnoeud_t p)
 {
-  /*
-    a completer
-  */
-  return 0 ;
+  if (file_pleine(f))
+    return -1;
+
+  f->queue ++;
+  f->Tab[f->queue] = p;
+  return 0;
 }
