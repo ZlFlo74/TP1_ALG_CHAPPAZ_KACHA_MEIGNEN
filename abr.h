@@ -1,4 +1,5 @@
-
+#ifndef _ABR_H_
+#define _ABR_H_
 /* structure noeud presentee en cours */
 
 typedef struct n {
@@ -46,3 +47,4 @@ Arbre_t intersection_deux_arbres (Arbre_t a1, Arbre_t a2) ;
 
 Arbre_t union_deux_arbres (Arbre_t a1, Arbre_t a2) ;
 
+#endif
