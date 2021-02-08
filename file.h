@@ -1,3 +1,6 @@
+#ifndef _FILE_H_
+#define _FILE_H_
+
 #include "abr.h"
 
 #define MAX_FILE_SIZE       32
@@ -20,3 +23,5 @@ int file_pleine (pfile_t f) ;
 pnoeud_t defiler (pfile_t f)  ;
 
 int enfiler (pfile_t f, pnoeud_t p) ;
+
+#endif

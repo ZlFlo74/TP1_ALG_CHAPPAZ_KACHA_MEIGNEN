@@ -14,15 +14,18 @@ int main(int argc, char**argv)
     for (int i=0; i<MAX_PILE_SIZE; i++)
     {
         arbre = malloc(sizeof(noeud_t));
-        assert(empiler(pile, arbre) == 0);
+        assert(empiler(pile, arbre));
     }
-    assert(empiler(pile, arbre) == -1);
+    assert(!empiler(pile, arbre));
 
     for (int i=MAX_PILE_SIZE-1; i>=0; i--)
     {
-        assert(depiler(pile) != NULL);
+        arbre = depiler(pile);
+        assert(arbre != NULL);
     }
     assert(depiler(pile) == NULL);
+
+    assert(detruire_pile(pile) == 0);
 
     printf("La structure pile est fonctionnelle !\n");
 }

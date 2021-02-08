@@ -53,11 +53,11 @@ int empiler (ppile_t p, pnoeud_t pn)
 {
   if (pile_pleine(p))
   {
-    return -1;
+    return 0;
   }
 
   p->sommet ++;
   p->Tab[p->sommet] = pn;
 
-  return 0;
+  return 1;
 }

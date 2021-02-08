@@ -39,9 +39,9 @@ pnoeud_t defiler (pfile_t f)
     return NULL;
 
   pnoeud_t noeud = f->Tab[f->tete];
-  for (int i=1; i<f->queue; i++)
+  for (int i=0; i<=f->queue; i++)
   {
-    f->Tab[i-1] = f->Tab[i];
+    f->Tab[i] = f->Tab[i+1];
   }
   f->queue --;
 
@@ -51,9 +51,9 @@ pnoeud_t defiler (pfile_t f)
 int enfiler (pfile_t f, pnoeud_t p)
 {
   if (file_pleine(f))
-    return -1;
+    return 0;
 
   f->queue ++;
   f->Tab[f->queue] = p;
-  return 0;
+  return 1;
 }

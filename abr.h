@@ -47,4 +47,8 @@ Arbre_t intersection_deux_arbres (Arbre_t a1, Arbre_t a2) ;
 
 Arbre_t union_deux_arbres (Arbre_t a1, Arbre_t a2) ;
 
+// FONCTIONS ANNEXES
+
+Arbre_t copie_arbre (Arbre_t a) ;
+
 #endif
