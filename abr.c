@@ -183,7 +183,32 @@ void parcourir_arbre_largeur (Arbre_t a)
 // A FAIRE
 void afficher_nombre_noeuds_par_niveau (Arbre_t a)
 {
-
+  if(a == NULL){
+    printf("Arbre vide");
+    return;
+  }
+  pfile_t file = creer_file();
+  enfiler(file,a);
+  printf("Niveau 0 : %d noeud(s)\n",file->queue+1);
+  int i = nombre_cles_arbre_nr(a);
+  int cle = file->queue+1;
+  int niveau = 1;
+  while(i>cle){
+    pfile_t newfile = creer_file();
+    while (!file_vide(file)){
+      pnoeud_t n = defiler(file);
+      if (n->fdroite!=NULL){
+        enfiler(newfile,n->fdroite);
+      }
+      if (n->fgauche!=NULL){
+        enfiler(newfile,n->fgauche);
+      }
+    }
+    cle += newfile->queue+1;
+    printf("Niveau %d : %d noeud(s)\n",niveau,newfile->queue+1);
+    file = newfile;
+    niveau ++;
+  }
   return ;
 }
 
@@ -244,7 +269,47 @@ void imprimer_liste_cle_triee_r (Arbre_t a)
 // A FAIRE
 void imprimer_liste_cle_triee_nr (Arbre_t a)
 {
+  if(a == NULL){
+    printf("Arbre vide");
+    return;
+  }
+  pfile_t file = creer_file();
+  enfiler(file,a);
+  int i = nombre_cles_arbre_nr(a);
+  i--;
+  printf("nombre de cles : %d\n",i);
+  while (i>file->queue){
+    printf("file queue : %d\n",file->queue);
+    pnoeud_t n = defiler(file);
+    if (feuille(n)==1){
+      printf("feuille");
+      enfiler(file,n);
+
+    }
+    else {
+      if (n->fgauche!=NULL){
+        enfiler(file,n->fgauche);
+      }
+      Arbre_t ccc = malloc(sizeof(Arbre_t));
+      ccc->cle = n->cle;
+      ccc->fdroite = NULL;
+      ccc->fgauche = NULL;
+      enfiler(file,ccc);
+      if (n->fdroite!=NULL){
+        enfiler(file,n->fdroite);
+      }
+      printf("file queue fin : %d\n",file->queue);
+    }
+  }
+  while(file->Tab[0]->cle>file->Tab[1]->cle){
+    pnoeud_t n = defiler(file);
+    enfiler(file,n);
+  }
   
+  for (int j=0; j<=file->queue;j++){
+    printf("%d ,",file->Tab[j]->cle);
+  }
+  printf("\n");
   return ;
 }
 
@@ -304,13 +369,97 @@ Arbre_t rechercher_cle_inf_arbre (Arbre_t a, int valeur)
 }
 
 
+void SousArbre (Arbre_t a, Arbre_t fa, int d){
+  Arbre_t tmp = fa;
+  if(d){
+    if (fa->fdroite == NULL){
+      a->fdroite = fa->fgauche;
+    }
+    else if (fa->fgauche == NULL){
+      a->fdroite = fa->fdroite;
+    }
+    else {
+      fa = fa->fdroite;
+      while (fa->fgauche != NULL){
+        fa = fa->fgauche;
+      }
+      fa->fgauche = tmp->fgauche;
+      a->fdroite = tmp->fdroite;
+    }
+  }
+  else {
+    if (fa->fdroite == NULL){
+      a->fgauche = fa->fgauche;
+    }
+    else if (fa->fgauche == NULL){
+      a->fgauche = fa->fdroite;
+    }
+    else {
+      fa = fa->fdroite;
+      while (fa->fgauche != NULL){
+        fa = fa->fgauche;
+      }
+      fa->fgauche = tmp->fgauche;
+      a->fgauche = tmp->fdroite;
+    }
+  }
+}
+
+
 Arbre_t detruire_cle_arbre (Arbre_t a, int cle)
 {
-  /*
-    a completer
-  */
-
-  return NULL ;
+  if (rechercher_cle_arbre(a,cle)==NULL){
+    return NULL;
+  }
+  Arbre_t finalA = a;
+  int find = 0;
+  if (a->cle == cle){
+    if (a->fdroite == NULL){
+      return a->fgauche;
+    }
+    if (a->fgauche == NULL){
+      return a->fdroite;
+    }
+    finalA = finalA->fdroite;
+    while (finalA->fgauche != NULL){
+      finalA = finalA->fgauche;
+    }
+    finalA->fgauche = a->fgauche;
+    return a->fdroite;
+  }
+  while (find==0){
+    if (finalA->fdroite != NULL && finalA->fdroite->cle == cle){
+      find = 2;
+    }
+    else if (finalA->fgauche != NULL && finalA->fgauche->cle == cle){
+      find = 1;
+    }
+    else if (rechercher_cle_arbre(finalA->fgauche,cle)==NULL){
+      finalA = finalA->fdroite;
+    }
+    else{
+      finalA = finalA->fgauche;
+    }
+  }
+  if (find == 2){
+    Arbre_t fd = finalA->fdroite;
+    if (feuille(fd)){
+      finalA->fdroite = NULL;
+    }
+    else{
+      SousArbre(finalA,fd,1);
+    }
+  }
+  else if (find == 1){
+    Arbre_t fg = finalA->fgauche;
+    if (feuille(fg)){
+      finalA->fgauche = NULL;
+    }
+    else{
+      SousArbre(finalA,fg,0);
+    }
+  }
+  return a ;
 }
 
 
