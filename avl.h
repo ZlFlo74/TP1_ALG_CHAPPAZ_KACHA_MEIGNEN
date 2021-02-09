@@ -27,4 +27,6 @@ Arbre_AVL_t lire_arbre (char *nom_fichier) ;
 
 void afficher_arbre (Arbre_AVL_t a, int niveau) ;
 
+void actualiser_balances (Arbre_AVL_t a);
+
 #endif

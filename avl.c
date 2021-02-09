@@ -9,11 +9,10 @@ Arbre_AVL_t rotation_gauche(Arbre_AVL_t a)
 {
     Arbre_AVL_t b = a->fdroite;
 
-    b->balance --;
-    a->balance = - b->balance;
-
     a->fdroite = b->fgauche;
     b->fgauche = a;
+
+    actualiser_balances(b);
 
     return b;
 }
@@ -22,24 +21,23 @@ Arbre_AVL_t rotation_droite(Arbre_AVL_t a)
 {
     Arbre_AVL_t b = a->fgauche;
 
-    b->balance ++;
-    a->balance = - b->balance;
-
     a->fgauche = b->fdroite;
     b->fdroite = a;
+
+    actualiser_balances(b);
 
     return b;
 }
 
 Arbre_AVL_t double_rotation_gauche(Arbre_AVL_t a)
 {
-    a->fgauche = rotation_droite(a->fgauche);
+    a->fdroite = rotation_droite(a->fdroite);
     return rotation_gauche(a);
 }
 
 Arbre_AVL_t double_rotation_droite(Arbre_AVL_t a)
 {
-    a->fdroite = rotation_gauche(a->fdroite);
+    a->fgauche = rotation_gauche(a->fgauche);
     return rotation_droite(a);
 }
 
@@ -74,17 +72,15 @@ int hauteur_arbre_r (Arbre_AVL_t a)
   return 1 + max(hauteur_arbre_r(a->fgauche), hauteur_arbre_r(a->fdroite)); 
 }
 
-void actualiser_balances (Arbre_AVL_t start, Arbre_AVL_t end)
+void actualiser_balances (Arbre_AVL_t a)
 {
-    if (start==NULL || end==NULL || start->cle == end->cle)
+    if (a==NULL)
         return;
     else
     {
-        start->balance = hauteur_arbre_r(start->fdroite) - hauteur_arbre_r(start->fgauche);
-        if (start->cle > end->cle)
-            actualiser_balances(start->fgauche, end);
-        else
-            actualiser_balances(start->fdroite, end);
+        a->balance = hauteur_arbre_r(a->fdroite) - hauteur_arbre_r(a->fgauche);
+        actualiser_balances(a->fgauche);
+        actualiser_balances(a->fdroite);
     }
 }
 
@@ -104,11 +100,8 @@ Arbre_AVL_t ajouter_noeud (Arbre_AVL_t a, Arbre_AVL_t n)
         {
             a->fdroite = ajouter_noeud (a->fdroite, n) ;
         }
-        if (a->fgauche != NULL && a->fdroite != NULL)
-        {
-            actualiser_balances(a, n);
-            a = reequilibrage(a);
-        }
+        actualiser_balances(a);
+        a = reequilibrage(a);
     }
 
     return a ;

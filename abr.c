@@ -266,7 +266,6 @@ void imprimer_liste_cle_triee_r (Arbre_t a)
   }
 }
 
-// A FAIRE
 void imprimer_liste_cle_triee_nr (Arbre_t a)
 {
   if(a == NULL){
