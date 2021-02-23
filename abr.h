@@ -13,6 +13,8 @@ typedef pnoeud_t Arbre_t;
 
 Arbre_t lire_arbre (char *nom_fichier) ;
 
+Arbre_t ajouter_cle (Arbre_t a, int cle);
+
 void afficher_arbre (Arbre_t a, int niveau) ;
 
 int hauteur_arbre_r (Arbre_t a) ;
@@ -46,6 +48,8 @@ Arbre_t detruire_cle_arbre (Arbre_t a, int cle) ;
 Arbre_t intersection_deux_arbres (Arbre_t a1, Arbre_t a2) ;
 
 Arbre_t union_deux_arbres (Arbre_t a1, Arbre_t a2) ;
+
+int inclusion_arbre(Arbre_t a1, Arbre_t a2);
 
 // FONCTIONS ANNEXES
 

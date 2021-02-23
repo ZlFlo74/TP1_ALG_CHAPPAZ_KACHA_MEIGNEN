@@ -180,7 +180,6 @@ void parcourir_arbre_largeur (Arbre_t a)
   detruire_file(file);
 }
 
-// A FAIRE
 void afficher_nombre_noeuds_par_niveau (Arbre_t a)
 {
   if(a == NULL){
@@ -258,7 +257,7 @@ int trouver_cle_min (Arbre_t a)
 
 void imprimer_liste_cle_triee_r (Arbre_t a)
 {
-  // Parcours profaaaondeur infixe récursif
+  // Parcours profondeur infixe récursif
   if (a != NULL) {
     imprimer_liste_cle_triee_r(a->fgauche);
     printf("%d ", a->cle);
@@ -324,8 +323,6 @@ int arbre_parfait (Arbre_t a)
 }
 
 
-
-
 Arbre_t rechercher_cle_sup_arbre (Arbre_t a, int valeur)
 {
   if (a == NULL) {
@@ -364,7 +361,6 @@ Arbre_t rechercher_cle_inf_arbre (Arbre_t a, int valeur)
       return sous_arbre_droit;
     }
   }
-  
 }
 
 
@@ -511,6 +507,27 @@ Arbre_t union_deux_arbres (Arbre_t a1, Arbre_t a2)
   detruire_file(file);
 
   return a_union ;
+}
+
+int inclusion_arbre(Arbre_t a1, Arbre_t a2) {
+  int est_inclus = 1;
+
+  Arbre_t n;
+  pfile_t file = creer_file();
+  enfiler(file, a1);
+  while (!file_vide(file))
+  {
+    n = defiler(file);
+    if (n != NULL)
+    {
+      enfiler(file, n->fgauche);
+      enfiler(file, n->fdroite);
+      if (rechercher_cle_arbre(a2, n->cle) == NULL)
+        est_inclus = 0;
+    }
+  }
+  detruire_file(file);
+  return est_inclus;
 }
 
 // FONCTIONS ANNEXES

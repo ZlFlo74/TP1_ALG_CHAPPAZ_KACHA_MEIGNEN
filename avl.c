@@ -192,3 +192,69 @@ void afficher_arbre (Arbre_AVL_t a, int niveau)
       }
   return ;
 }
+
+Arbre_AVL_t detruire_cle (Arbre_AVL_t a, int cle)
+{
+  Arbre_AVL_t noeud_a_detruire = rechercher_cle_arbre(a, cle);
+  Arbre_AVL_t arbre_a_actualiser;
+  Arbre_AVL_t noeud_a_echanger ;
+  if (noeud_a_detruire == NULL)
+    return a;
+  
+  // Etape 1, passer le noeud a detruire en tant que feuille et le détruire
+  if (noeud_a_detruire->fgauche == NULL && noeud_a_detruire->fdroite == NULL) {
+    arbre_a_actualiser = a;
+  }
+  else if (noeud_a_detruire->fgauche == NULL) {
+    noeud_a_echanger = noeud_a_detruire->fdroite;
+    int cle_a_echanger = noeud_a_echanger->cle;
+    noeud_a_echanger->cle = noeud_a_detruire->cle;
+    noeud_a_detruire->cle = cle_a_echanger;
+    noeud_a_detruire->fdroite = NULL;
+    arbre_a_actualiser = noeud_a_detruire;
+  }
+  else {
+    arbre_a_actualiser = noeud_a_detruire->fgauche;
+    noeud_a_echanger = arbre_a_actualiser;
+    while (noeud_a_echanger->fdroite != NULL)
+    {
+      noeud_a_echanger = noeud_a_echanger->fdroite;
+    }
+    int cle_a_echanger = noeud_a_echanger->cle;
+    noeud_a_echanger->cle = noeud_a_detruire->cle;
+    noeud_a_detruire->cle = cle_a_echanger;
+    if (noeud_a_echanger->fgauche != NULL) {
+      noeud_a_echanger = rotation_droite(noeud_a_echanger);
+      noeud_a_echanger->fdroite = NULL;
+    }
+  }
+
+  // Etape 2, on actualise les balances
+  actualiser_balances(a);
+
+  // Etape 3, on distingue les différents cas vus en cours pour réorganiser l'arbre
+  if (arbre_a_actualiser->balance == -1) {} // CAS I : Rien à faire
+  else if (arbre_a_actualiser->balance == 0) {  // CAS II : Des déséquilibres peuvent apparaître plus haut : on verifie
+    if (a->balance == 2) {
+      reequilibrage(a);
+    }
+  }
+  else {
+    if (arbre_a_actualiser->balance == -2) { // CAS III.1 : Reequilibrage du sous arbre nécessaire mais hauteur non modifiée
+      reequilibrage(arbre_a_actualiser);
+    }
+    else {  // CAS III.2 et III.3
+      reequilibrage(arbre_a_actualiser);
+      reequilibrage(a);
+    }
+  }
+
+  return a;
+}
+
+int nombre_cles_arbre_r (Arbre_AVL_t a)
+{
+  if (a==NULL) {return 0;}
+
+  return 1 + nombre_cles_arbre_r(a->fgauche) + nombre_cles_arbre_r(a->fdroite) ;
+}

@@ -16,6 +16,7 @@ int main (int argc, char**argv)
   a = lire_arbre (argv[1]) ;
   a2 = lire_arbre (argv[2]);
   
+  printf("Affichage du premier arbre donné :\n");
   afficher_arbre (a,0) ;
 
   printf("Hauteur de l'arbre (récursive) : %d\n", hauteur_arbre_r(a));
@@ -67,4 +68,23 @@ int main (int argc, char**argv)
   afficher_arbre(union_deux_arbres(a,a2), 0);
   printf("\n");
 
+  printf("Argument 1 inclus dans Argument 2 : %d\n\n", inclusion_arbre(a,a2));
+
+  printf("Test de detruire_cle sur le premier argument.\n");
+  printf("Destruction de toutes les cles, reconstruction de l'arbre à partir des clés, et affichage de ce dernier : \n");
+  Arbre_t a_bis = copie_arbre(a);
+  int nbr_cles = nombre_cles_arbre_r(a);
+  int cles[nbr_cles];
+  for (int i = 0; i < nbr_cles; i++)
+  {
+    cles[i] = a_bis->cle;
+    a_bis = detruire_cle_arbre(a_bis, a_bis->cle);
+  }
+  for (int i = 0; i < nbr_cles; i++)
+  {
+    a_bis = ajouter_cle(a_bis, cles[i]);
+  }
+  afficher_arbre(a_bis, 0);
+  
+  
 }

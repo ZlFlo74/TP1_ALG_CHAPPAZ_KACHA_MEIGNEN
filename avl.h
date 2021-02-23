@@ -21,6 +21,8 @@ Arbre_AVL_t double_rotation_droite(Arbre_AVL_t a) ;
 
 Arbre_AVL_t reequilibrage(Arbre_AVL_t a);
 
+Arbre_AVL_t rechercher_cle_arbre (Arbre_AVL_t a, int valeur);
+
 Arbre_AVL_t ajouter_cle (Arbre_AVL_t a, int cle);
 
 Arbre_AVL_t lire_arbre (char *nom_fichier) ;
@@ -28,5 +30,9 @@ Arbre_AVL_t lire_arbre (char *nom_fichier) ;
 void afficher_arbre (Arbre_AVL_t a, int niveau) ;
 
 void actualiser_balances (Arbre_AVL_t a);
+
+Arbre_AVL_t detruire_cle (Arbre_AVL_t a, int cle);
+
+int nombre_cles_arbre_r (Arbre_AVL_t a);
 
 #endif
